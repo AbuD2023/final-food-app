@@ -1,15 +1,54 @@
+import 'dart:developer';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:food_app/Controller/Api/product_api_controller_dio.dart';
+import 'package:food_app/Controller/Api/product_api_controller_http.dart';
 import 'package:food_app/constants/app_colors.dart';
 import 'package:food_app/constants/app_images.dart';
 import 'package:food_app/model/product_model.dart';
 import 'package:food_app/widgets/custom_card_product.dart';
 import 'package:food_app/widgets/custom_list_tile.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../widgets/custom_square_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController rateController = TextEditingController();
+  late ProductApiControllerWithDio _productApiControllerWithDio;
+  late ProductApiControllerWithHttp _productApiControllerWithHttp;
+
+  // get image on device
+  final ImagePicker _picker = ImagePicker();
+  XFile? _selectedImage;
+
+  // function to pick image on device
+  Future<void> _pickImage(ImageSource imageSource) async {
+    final XFile? image = await _picker.pickImage(source: imageSource);
+    if (image != null) {
+      setState(() {
+        _selectedImage = image;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _productApiControllerWithDio = ProductApiControllerWithDio();
+    _productApiControllerWithHttp = ProductApiControllerWithHttp();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,18 +180,42 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(
               height: 300,
-              child: ListView.builder(
-                itemCount: productData.length,
-                itemBuilder: (context, index) {
-                  return CustomCardProduct(
-                    image: productData[index].image,
-                    title: productData[index].title,
-                    price: productData[index].price,
-                    rate: productData[index].rate,
-                  );
+              child: FutureBuilder<List<ProductModel>>(
+                future: _productApiControllerWithHttp.getProductesOnApi(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError || !snapshot.hasData) {
+                    return const Center(
+                      child: Text('Something went wrong'),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final data = snapshot.data![index];
+
+                        // log(data.image.toString());
+
+                        List<int> imageBytesList =
+                            List<int>.from(data.image.cast<int>());
+
+                        Uint8List imageBytes =
+                            Uint8List.fromList(imageBytesList);
+                        return CustomCardProduct(
+                          image: imageBytes,
+                          title: data.title!,
+                          price: data.price!,
+                          rate: data.rate!,
+                        );
+                      },
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                    );
+                  }
                 },
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
               ),
             ),
             const SizedBox(
@@ -160,6 +223,128 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          customShowDailog();
+        },
+        child: Icon(Icons.food_bank_outlined),
+        backgroundColor: AppColors.kPrimaryColor,
+      ),
+    );
+  }
+
+  customShowDailog() {
+    showDialog(
+      // barrierColor: AppColors.kPrimaryColor[400],
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.kPrimaryColor[50],
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () => _pickImage(ImageSource.gallery),
+                    icon: Icon(Icons.add_photo_alternate)),
+                IconButton(
+                    onPressed: () => _pickImage(ImageSource.camera),
+                    icon: Icon(Icons.add_a_photo)),
+              ],
+            ),
+            Text('Add new food'),
+          ],
+        ),
+        actions: [
+          SizedBox(
+            height: 25,
+          ),
+          TextFormField(
+            controller: titleController,
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your Title';
+              }
+              return null;
+            },
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'Title',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          TextFormField(
+            controller: priceController,
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your price';
+              }
+              return null;
+            },
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'Price',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          TextFormField(
+            controller: rateController,
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your rate';
+              }
+              return null;
+            },
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'Rate',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Center(
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.kPrimaryColor[200]),
+                  onPressed: () async {
+                    await _productApiControllerWithDio
+                        .postProductOnApiAndUploadImage(
+                            titleController.text,
+                            double.parse(priceController.text),
+                            double.parse(rateController.text),
+                            _selectedImage?.path != null
+                                ? _selectedImage
+                                : null);
+                  },
+                  child: Text(
+                    'Add To Api',
+                    style: TextStyle(color: Colors.white),
+                  ))),
+        ],
       ),
     );
   }

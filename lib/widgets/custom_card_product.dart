@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomCardProduct extends StatelessWidget {
-  final String image;
+  var image;
   final String title;
   final double price;
   final double rate;
-  const CustomCardProduct(
+  CustomCardProduct(
       {super.key,
       required this.image,
       required this.title,
@@ -31,7 +31,7 @@ class CustomCardProduct extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Image.asset(
+              Image.memory(
                 image,
                 height: 180,
                 width: 180,

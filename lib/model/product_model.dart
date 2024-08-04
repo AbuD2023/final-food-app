@@ -1,14 +1,33 @@
 class ProductModel {
-  final String image;
-  final String title;
-  final double price;
-  final double rate;
+  int? id;
+  var image;
+  String? title;
+  double? price;
+  double? rate;
 
-  ProductModel(
-      {required this.image,
-      required this.title,
-      required this.price,
-      required this.rate});
+  ProductModel({
+    this.id,
+    required this.image,
+    required this.title,
+    required this.price,
+    required this.rate,
+  });
+  ProductModel.fromJson(Map<String, dynamic> json) {
+    id = int.tryParse(json['id']) ?? 0;
+    image = json['image'];
+    title = json['title'] as String;
+    price = double.tryParse(json['price'].toString()) ?? 0.0;
+    rate = double.tryParse(json['rate'].toString()) ?? 0.0;
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['image'] = image;
+    data['title'] = title;
+    data['price'] = price;
+    data['rate'] = rate;
+    return data;
+  }
 }
 
 List<ProductModel> productData = [
