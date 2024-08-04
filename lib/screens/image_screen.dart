@@ -14,16 +14,24 @@ class _ImageScreenState extends State<ImageScreen> {
   Widget build(BuildContext context) {
     // Animation<double>? opacity = (value / 1000).clamp(0, 1);
     return Scaffold(
-      body: Center(
-        child: CachedNetworkImage(
-          height: 200,
-          width: 200,
-          imageUrl: 'http://via.placeholder.com/350x150',
-          placeholder: (context, url) => SpinKitWave(
-            color: Colors.red,
-            size: 50.0,
+      body: Column(
+        children: [
+          Text(
+            'testing github',
+            style: TextStyle(),
           ),
-        ),
+          Center(
+            child: CachedNetworkImage(
+              height: 200,
+              width: 200,
+              imageUrl: 'http://via.placeholder.com/350x150',
+              placeholder: (context, url) => SpinKitWave(
+                color: Colors.red,
+                size: 50.0,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
