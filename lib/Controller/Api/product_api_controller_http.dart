@@ -10,11 +10,9 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class ProductApiControllerWithHttp with ChangeNotifier {
-
-
   Future<List<ProductModel>> getProductesOnApi() async {
     try {
-      final response = await http.get(Uri.parse('${ApiUrl.url}Product'));
+      final response = await http.get(Uri.parse('${ApiUrl.url}products'));
 
       if (response.statusCode == 200) {
         final List<dynamic> chatRoomJson = json.decode(response.body);
@@ -35,7 +33,7 @@ class ProductApiControllerWithHttp with ChangeNotifier {
 
   Future<List<ProductModel>> getProductesByIdOnApi(int id) async {
     try {
-      final response = await http.get(Uri.parse('${ApiUrl.url}$id'));
+      final response = await http.get(Uri.parse('${ApiUrl.url}products/$id'));
 
       if (response.statusCode == 200) {
         print(response.body);
@@ -58,7 +56,7 @@ class ProductApiControllerWithHttp with ChangeNotifier {
   Future<void> postProductOnApi(ProductModel productModel) async {
     try {
       final response = await http.post(
-        Uri.parse('${ApiUrl.url}Product'),
+        Uri.parse('${ApiUrl.url}products'),
         headers: {'Content-Type': 'application/json'},
         body: productModel.toJson(),
         // body: jsonEncode({
@@ -93,7 +91,7 @@ class ProductApiControllerWithHttp with ChangeNotifier {
     try {
       // Save the data and upload the image to the server/api
       final response = await http.post(
-        Uri.parse('${ApiUrl.url}Product'),
+        Uri.parse('${ApiUrl.url}products'),
         headers: {'Content-Type': 'application/json'},
         // --- 1
         // data: productModel.toJson(),

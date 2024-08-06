@@ -17,7 +17,7 @@ class ProductApiControllerWithDio with ChangeNotifier {
     dio = Dio();
   }
   Future<List<ProductModel>> getProductesOnApi() async {
-    String url = '${ApiUrl.url}Product';
+    String url = '${ApiUrl.url}products';
     try {
       Response response = await dio.get(
         url,
@@ -45,7 +45,7 @@ class ProductApiControllerWithDio with ChangeNotifier {
   }
 
   Future<List<ProductModel>> getProductesByIdOnApi(int id) async {
-    String url = '${ApiUrl.url}Product/$id';
+    String url = '${ApiUrl.url}products/$id';
     try {
       Response response = await dio.get(
         url,
@@ -72,7 +72,7 @@ class ProductApiControllerWithDio with ChangeNotifier {
   }
 
   Future<void> postProductOnApi(ProductModel productModel) async {
-    String url = '${ApiUrl.url}Product';
+    String url = '${ApiUrl.url}products';
     try {
       Response response = await dio.get(
         url,
@@ -110,7 +110,7 @@ class ProductApiControllerWithDio with ChangeNotifier {
     try {
       // Save the data and upload the image to the server/api
       final response = await dio.post(
-        '${ApiUrl.url}Product',
+        '${ApiUrl.url}products',
         options: Options(headers: {'Content-Type': 'application/json'}),
         // --- 1
         // data: productModel.toJson(),
