@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +8,6 @@ import 'package:food_app/model/product_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProductApiControllerWithDio with ChangeNotifier {
-  // List<ProductModel> _product = [];
-  // List<ProductModel> get prodact => _product;
   late Dio dio;
   ProductApiControllerWithDio() {
     dio = Dio();
@@ -30,10 +26,7 @@ class ProductApiControllerWithDio with ChangeNotifier {
         final product =
             chatRoomJson.map((json) => ProductModel.fromJson(json)).toList();
         log(response.data);
-        // --- 2
-        // _product =
-        //     chatRoomJson.map((json) => ProductModel.fromJson(json)).toList();
-        // notifyListeners();
+
         return product;
       } else {
         throw Exception('Failed to load product');
@@ -57,44 +50,12 @@ class ProductApiControllerWithDio with ChangeNotifier {
         // --- 1
         final product =
             chatRoomJson.map((json) => ProductModel.fromJson(json)).toList();
-        // --- 2
-        // _product =
-        // chatRoomJson.map((json) => ProductModel.fromJson(json)).toList();
-        // notifyListeners();
+
         return product;
       } else {
         throw Exception('Failed to load product By Id');
       }
     } catch (e) {
-      // log(e.toString());
-      rethrow;
-    }
-  }
-
-  Future<void> postProductOnApi(ProductModel productModel) async {
-    String url = '${ApiUrl.url}products';
-    try {
-      Response response = await dio.get(
-        url,
-        options: Options(headers: {'Content-Type': 'application/json'}),
-        data: productModel.toJson(),
-        // body: jsonEncode({
-        //   "id": 0,
-        //   "image": productModel.image,
-        //   "title": productModel.title,
-        //   "price": productModel.price,
-        //   "rate": productModel.rate,
-        // }),
-      );
-      if (response.statusCode == 201) {
-        // _product.add(productModel);
-        log(response.data);
-        // notifyListeners();
-      } else {
-        throw Exception('Failed to post product');
-      }
-    } catch (e) {
-      log(e.toString());
       rethrow;
     }
   }
@@ -103,24 +64,22 @@ class ProductApiControllerWithDio with ChangeNotifier {
       String title, double price, double rate, XFile? selectedImage) async {
     log('selectedImage: ${selectedImage?.path}');
 
-    // قراءة الصورة وتحويلها إلى بايتات
-    File imageFile = File(selectedImage!.path);
-    Uint8List imageBytes = await imageFile.readAsBytes();
-    // imageBytes = imageBytes.buffer.asUint8List();
+    // قراءة الصورة وتحويلها إلى بايتات byte لتخزينها في عمود Image في API
+    final bytes = await selectedImage!.readAsBytes();
+    final base64String = base64Encode(bytes);
+
     try {
       // Save the data and upload the image to the server/api
       final response = await dio.post(
         '${ApiUrl.url}products',
         options: Options(headers: {'Content-Type': 'application/json'}),
-        // --- 1
-        // data: productModel.toJson(),
-        // --- 2
+        // إسناد البيانات لكي يتم حفضها في الـ API
         data: jsonEncode({
-          "id": 0,
-          "image": imageBytes,
-          "title": title,
-          "price": price,
-          "rate": rate,
+          "Id": 0,
+          "Image": base64String,
+          "Title": title,
+          "Price": price,
+          "Rate": rate,
         }),
       );
       print('Upload Response: ${response.data}');
@@ -129,6 +88,39 @@ class ProductApiControllerWithDio with ChangeNotifier {
     }
   }
 
-  Future<void> putProductOnApi(ProductModel productModel) async {}
+  Future<void> putProductOnApi(
+      {required int id,
+      required String title,
+      required double price,
+      required double rate,
+      required String image,
+      required XFile? selectedImage}) async {
+    log('selectedImage: ${selectedImage?.path}');
+
+    // قراءة الصورة وتحويلها إلى بايتات byte لتخزينها في عمود Image في API
+
+    final bytes = await selectedImage?.readAsBytes();
+    final base64String = base64Encode(bytes != null ? bytes : []);
+
+    try {
+      // Save the data and upload the image to the server/api
+      final response = await dio.put(
+        '${ApiUrl.url}products/$id',
+        options: Options(headers: {'Content-Type': 'application/json'}),
+        // إسناد البيانات لكي يتم حفضها في الـ API
+        data: jsonEncode({
+          "Id": id,
+          "Image": selectedImage != null ? base64String : image,
+          "Title": title,
+          "Price": price,
+          "Rate": rate,
+        }),
+      );
+      print('Upload Response: ${response.data}');
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   Future<void> deleteProductOnApi(int id) async {}
 }

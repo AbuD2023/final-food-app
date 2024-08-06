@@ -1,6 +1,7 @@
-import 'dart:typed_data';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:food_app/Controller/Api/product_api_controller_dio.dart';
 import 'package:food_app/Controller/Api/product_api_controller_http.dart';
 import 'package:food_app/constants/app_colors.dart';
@@ -26,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController rateController = TextEditingController();
   late ProductApiControllerWithDio _productApiControllerWithDio;
   late ProductApiControllerWithHttp _productApiControllerWithHttp;
+
+  bool chackPost = false;
 
   // get image on device
   final ImagePicker _picker = ImagePicker();
@@ -179,42 +182,116 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(
               height: 300,
-              child: FutureBuilder<List<ProductModel>>(
-                future: _productApiControllerWithHttp.getProductesOnApi(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError || !snapshot.hasData) {
-                    return const Center(
-                      child: Text('Something went wrong'),
-                    );
-                  } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        final data = snapshot.data![index];
-
-                        // log(data.image.toString());
-
-                        List<int> imageBytesList =
-                            List<int>.from(data.image.cast<int>());
-
-                        Uint8List imageBytes =
-                            Uint8List.fromList(imageBytesList);
-                        return CustomCardProduct(
-                          image: imageBytes,
-                          title: data.title!,
-                          price: data.price!,
-                          rate: data.rate!,
+              child: Stack(
+                children: [
+                  FutureBuilder<List<ProductModel>>(
+                    future: _productApiControllerWithHttp.getProductesOnApi(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                    );
-                  }
-                },
+                      } else if (snapshot.hasError || !snapshot.hasData) {
+                        return const Center(
+                          child: Text('Something went wrong'),
+                        );
+                      } else {
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final data = snapshot.data![index];
+
+                            return InkWell(
+                              onLongPress: () => ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      duration: const Duration(seconds: 3),
+                                      content: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          IconButton(
+                                              onPressed: () async {
+                                                setState(
+                                                    () => chackPost = true);
+                                                await _productApiControllerWithHttp
+                                                    .deleteProductOnApi(
+                                                        data.id!);
+                                                setState(
+                                                    () => chackPost = false);
+                                              },
+                                              icon: const Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ),
+                                                  Text(
+                                                    'Yes',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              )),
+                                          Text(
+                                            'هل انت متاكد من حذف ${data.title}',
+                                            textDirection: TextDirection.rtl,
+                                          ),
+                                        ],
+                                      ))),
+                              onTap: () {
+                                titleController.text = data.title!;
+                                priceController.text = data.price.toString();
+                                rateController.text = data.rate.toString();
+                                log(data.id.toString());
+                                customShowDailog(
+                                    titleButton: 'Update data To Api',
+                                    title: 'Update food',
+                                    onPressed: () async {
+                                      await _productApiControllerWithDio
+                                          .putProductOnApi(
+                                            image: data.image!,
+                                              id: data.id!,
+                                              title: titleController.text,
+                                              price: double.parse(
+                                                  priceController.text),
+                                              rate: double.parse(
+                                                  rateController.text),
+                                              selectedImage:
+                                                  _selectedImage?.path != null
+                                                      ? _selectedImage
+                                                      : null);
+                                      titleController.clear();
+                                      priceController.clear();
+                                      rateController.clear();
+                                      _selectedImage = null;
+                                      // Navigator.pop(context);
+                                      setState(() => null);
+                                    });
+                              },
+                              child: CustomCardProduct(
+                                // يتم تحويل الصورة من byte الى base64 لكي يتم عرضها
+                                image: data.image!,
+                                title: data.title!,
+                                price: data.price!,
+                                rate: data.rate!,
+                              ),
+                            );
+                          },
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                        );
+                      }
+                    },
+                  ),
+                  chackPost
+                      ? const Center(
+                          child: Text(
+                          'يتم الحذف الان',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 22),
+                        ))
+                      : Container(),
+                ],
               ),
             ),
             const SizedBox(
@@ -225,17 +302,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          customShowDailog();
+          customShowDailog(
+              titleButton: 'Add To Api',
+              title: 'Add new food',
+              onPressed: () async {
+                if (titleController.text.isNotEmpty &&
+                    priceController.text.isNotEmpty &&
+                    rateController.text.isNotEmpty) {
+                  await _productApiControllerWithDio
+                      .postProductOnApiAndUploadImage(
+                          titleController.text,
+                          double.parse(priceController.text),
+                          double.parse(rateController.text),
+                          _selectedImage?.path != null ? _selectedImage : null);
+                  titleController.clear();
+                  priceController.clear();
+                  rateController.clear();
+                  _selectedImage = null;
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                  setState(() {});
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Center(child: Text('جميع الحققول مطلوبية'))));
+                }
+              });
         },
-        child: Icon(Icons.food_bank_outlined),
         backgroundColor: AppColors.kPrimaryColor,
+        child: const Icon(Icons.food_bank_outlined),
       ),
     );
   }
 
-  customShowDailog() {
+  customShowDailog(
+      {required String titleButton,
+      required String title,
+      required VoidCallback onPressed}) {
     showDialog(
-      // barrierColor: AppColors.kPrimaryColor[400],
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.kPrimaryColor[50],
@@ -252,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: Icon(Icons.add_a_photo)),
               ],
             ),
-            Text('Add new food'),
+            Text(title),
           ],
         ),
         actions: [
@@ -329,20 +432,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.kPrimaryColor[200]),
-                  onPressed: () async {
-                    await _productApiControllerWithDio
-                        .postProductOnApiAndUploadImage(
-                            titleController.text,
-                            double.parse(priceController.text),
-                            double.parse(rateController.text),
-                            _selectedImage?.path != null
-                                ? _selectedImage
-                                : null);
-                  },
+                  onPressed: onPressed,
                   child: Text(
-                    'Add To Api',
+                    titleButton,
                     style: TextStyle(color: Colors.white),
                   ))),
+          chackPost != false ? CircularProgressIndicator() : Container(),
         ],
       ),
     );
