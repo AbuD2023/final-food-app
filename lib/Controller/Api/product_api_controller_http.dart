@@ -10,8 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class ProductApiControllerWithHttp with ChangeNotifier {
-  // List<ProductModel> _product = [];
-  // List<ProductModel> get prodact => _product;
+
 
   Future<List<ProductModel>> getProductesOnApi() async {
     try {

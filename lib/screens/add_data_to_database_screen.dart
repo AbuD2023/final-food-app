@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:food_app/Controller/Database/database_helper.dart';
 import 'package:food_app/model/product_model.dart';
-import 'package:food_app/widgets/custom_text_fild.dart';
 
 class InsertDatabsae extends StatefulWidget {
   const InsertDatabsae({super.key});
