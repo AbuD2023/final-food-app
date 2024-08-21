@@ -28,27 +28,26 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter_spinkit:
-  google_fonts: ^6.2.1
+  cached_network_image: null
+  cupertino_icons: ^1.0.6
+  dartz: ^0.10.1
+  dio: ^5.5.0+1
+  firebase_auth: ^5.1.4
+  firebase_core: ^3.3.0
   flutter:
     sdk: flutter
+  flutter_spinkit: null
   flutter_svg: ^2.0.10+1
-  cached_network_image:
-  cupertino_icons: ^1.0.6
-  sqflite: ^2.3.3+1
-  firebase_core: ^3.3.0
+  google_fonts: ^6.2.1
+  google_sign_in: ^6.2.1
   http: ^1.2.2
-  dio: ^5.5.0+1
   image_picker: ^1.1.2
-
+  sqflite: ^2.3.3+1
 
 dev_dependencies:
+  flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^3.0.0
-
-
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -65,9 +64,9 @@ flutter:
     - assets/svg/
 
   fonts:
-   - family: Poppins
-     fonts:
-       - asset: assets/fonts/Poppins-Regular.ttf
-   - family: Pacifico
-     fonts:
-       - asset: assets/fonts/Pacifico-Regular.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf

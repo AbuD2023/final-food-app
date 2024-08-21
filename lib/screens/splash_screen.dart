@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/screens/sign_in_screen.dart';
 
@@ -12,10 +14,11 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => SignInScreen(),
-      ));
+    Timer(const Duration(seconds: 3), () {
+      log('${FirebaseAuth.instance.currentUser}');
+      Navigator.of(context).pushNamed(FirebaseAuth.instance.currentUser == null
+          ? "SignInScreen"
+          : "base_screen");
     });
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,

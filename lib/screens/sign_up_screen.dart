@@ -1,32 +1,26 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:food_app/Controller/firebase/auth_user_with_email_and_password_firebase_controller.dart';
-import 'package:food_app/Controller/firebase/auth_user_with_google_sign_in_firebase_controller.dart';
 import 'package:food_app/constants/app_colors.dart';
 import 'package:food_app/widgets/custom_button.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   AuthUserWithEmailAndPasswordFirebaseController authFirebaseController =
       AuthUserWithEmailAndPasswordFirebaseController();
-  AuthUserWithGoogleSignInFirebaseController authGoogleController =
-      AuthUserWithGoogleSignInFirebaseController();
-
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   String email = '';
   bool showPassword = true;
   bool isCheck = false;
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,7 +36,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Sign in',
+                      'Sign up',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 24,
@@ -122,19 +116,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                       child: Row(
                         children: [
-                          // IconButton(
-                          //   onPressed: () {
-                          //     setState(() {
-                          //       showPassword = !showPassword;
-                          //     });
-                          //   },
-                          //   icon: Icon(
-                          //     showPassword
-                          //         ? Icons.visibility_off
-                          //         : Icons.visibility,
-                          //     color: Colors.white,
-                          //   ),
-                          // ),
                           Icon(
                             showPassword
                                 ? Icons.visibility_off
@@ -192,40 +173,17 @@ class _SignInScreenState extends State<SignInScreen> {
                   keyboardType: TextInputType.visiblePassword,
                   maxLength: 8,
                 ),
-                const SizedBox(
-                  height: 14,
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      checkColor: Colors.white,
-                      value: isCheck,
-                      onChanged: (value) {
-                        setState(() {
-                          isCheck = value!;
-                        });
-                      },
-                    ),
-                    const Text(
-                      'Rememeber me',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ],
-                ),
                 SizedBox(height: 59),
                 CustomButton(
                   backgroundColor: Colors.black,
-                  text: 'Sign in ',
-                  onTap: () {
+                  text: 'Sign UP ',
+                  onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      authFirebaseController.signIn(
-                          emailController.text, passwordController.text);
+                      await authFirebaseController.signUp(
+                          email: emailController.text,
+                          password: passwordController.text);
                       log('email: ${emailController.text}, password: ${passwordController.text}');
-
-                      Navigator.pushNamed(context, 'base_screen');
-                      // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      //   builder: (context) => BaseScreen(),
-                      // ));
+                      Navigator.pushNamed(context, 'SignInScreen');
                     }
                   },
                   textColor: Colors.white,
@@ -233,55 +191,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        height: 6,
-                        color: AppColors.kGray,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text(
-                      'OR',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.kGray,
-                        height: 6,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 18),
-                CustomButton(
-                  backgroundColor: Colors.black,
-                  text: 'Create an account',
-                  onTap: () {
-                    Navigator.of(context).pushNamed('SignUpScreen');
-                  },
-                  textColor: Colors.white,
-                ),
-                SizedBox(
-                  height: 19,
-                ),
-                CustomButton(
-                  text: 'Continue with Google',
-                  onTap: () async {
-                    await authGoogleController.signInWithGoogle();
-                    Navigator.of(context).pushNamed('base_screen');
-                  },
-                  textColor: Colors.black,
-                  backgroundColor: Colors.white,
-                  image: 'assets/icons/google.png',
-                )
               ],
             ),
           ),

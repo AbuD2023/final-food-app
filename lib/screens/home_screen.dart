@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:food_app/Controller/Api/product_api_controller_dio.dart';
 import 'package:food_app/Controller/Api/product_api_controller_http.dart';
+import 'package:food_app/Controller/firebase/auth_user_with_email_and_password_firebase_controller.dart';
+import 'package:food_app/Controller/firebase/auth_user_with_google_sign_in_firebase_controller.dart';
 import 'package:food_app/constants/app_colors.dart';
 import 'package:food_app/constants/app_images.dart';
 import 'package:food_app/model/product_model.dart';
@@ -73,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.search,
                       color: Colors.black,
                     )),
-                label: Text(
+                label: const Text(
                   'Search',
                   style: TextStyle(fontSize: 17, color: Colors.black),
                 )),
@@ -93,16 +95,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.arrow_back_ios)),
+                  icon: const Icon(Icons.arrow_back_ios)),
             )),
-            CustomListTile(image: AppImages.kIconSetting, title: 'Settings'),
-            CustomListTile(
+            const CustomListTile(
+                image: AppImages.kIconSetting, title: 'Settings'),
+            InkWell(
+              child: const CustomListTile(
+                image: AppImages.kIconSetting,
+                title: 'تسجيل خروج',
+              ),
+              onTap: () async {
+                await AuthUserWithGoogleSignInFirebaseController()
+                    .signOutWithGoogle();
+                await AuthUserWithEmailAndPasswordFirebaseController()
+                    .signOut()
+                    .then((_) {
+                  log('${FirebaseAuth.instance.currentUser}');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      'SignInScreen', (route) => false);
+                });
+              },
+            ),
+            const CustomListTile(
                 image: 'assets/icons/scan_code.png', title: 'Scan Code'),
-            CustomListTile(image: 'assets/icons/wallet.png', title: 'Wallet'),
-            CustomListTile(image: 'assets/icons/offers.png', title: 'Offers'),
-            CustomListTile(image: 'assets/icons/help.png', title: 'Help'),
-            CustomListTile(image: 'assets/icons/help.png', title: 'Help'),
-            CustomListTile(
+            const CustomListTile(
+                image: 'assets/icons/wallet.png', title: 'Wallet'),
+            const CustomListTile(
+                image: 'assets/icons/offers.png', title: 'Offers'),
+            const CustomListTile(image: 'assets/icons/help.png', title: 'Help'),
+            const CustomListTile(image: 'assets/icons/help.png', title: 'Help'),
+            const CustomListTile(
                 image: 'assets/icons/rate.png', title: 'Rate the app'),
           ],
         ),
@@ -111,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomSquareCard(),
@@ -124,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 358,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Color(0xff333333),
+                color: const Color(0xff333333),
               ),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -132,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   'Use code \niLovemyfood \nto get 10% off on your orders',
                   style: GoogleFonts.lato(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                         fontSize: 17),
@@ -249,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     onPressed: () async {
                                       await _productApiControllerWithDio
                                           .putProductOnApi(
-                                            image: data.image!,
+                                              image: data.image!,
                                               id: data.id!,
                                               title: titleController.text,
                                               price: double.parse(
@@ -265,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       rateController.clear();
                                       _selectedImage = null;
                                       // Navigator.pop(context);
-                                      setState(() => null);
+                                      setState(() {});
                                     });
                               },
                               child: CustomCardProduct(
@@ -349,17 +371,17 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 IconButton(
                     onPressed: () => _pickImage(ImageSource.gallery),
-                    icon: Icon(Icons.add_photo_alternate)),
+                    icon: const Icon(Icons.add_photo_alternate)),
                 IconButton(
                     onPressed: () => _pickImage(ImageSource.camera),
-                    icon: Icon(Icons.add_a_photo)),
+                    icon: const Icon(Icons.add_a_photo)),
               ],
             ),
             Text(title),
           ],
         ),
         actions: [
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           TextFormField(
@@ -381,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fillColor: Colors.grey[200],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           TextFormField(
@@ -403,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fillColor: Colors.grey[200],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           TextFormField(
@@ -425,7 +447,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fillColor: Colors.grey[200],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           Center(
@@ -435,9 +457,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: onPressed,
                   child: Text(
                     titleButton,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ))),
-          chackPost != false ? CircularProgressIndicator() : Container(),
+          chackPost != false ? const CircularProgressIndicator() : Container(),
         ],
       ),
     );

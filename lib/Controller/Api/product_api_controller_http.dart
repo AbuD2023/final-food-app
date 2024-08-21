@@ -10,12 +10,13 @@ import 'package:image_picker/image_picker.dart';
 class ProductApiControllerWithHttp with ChangeNotifier {
   Future<List<ProductModel>> getProductesOnApi() async {
     try {
-      final response = await http.get(Uri.parse('${ApiUrl.url}products'));
+      final response =
+          await http.get(Uri.parse('https://www.wist.somee.com/api/products'));
 
       if (response.statusCode == 200) {
-        final List<dynamic> chatRoomJson = json.decode(response.body);
+        final List<dynamic> productData = json.decode(response.body);
         final product =
-            chatRoomJson.map((json) => ProductModel.fromJson(json)).toList();
+            productData.map((json) => ProductModel.fromJson(json)).toList();
         return product;
       } else {
         throw Exception('Failed to load product');
