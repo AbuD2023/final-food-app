@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:food_app/Controller/firebase_colc/product_firebase.dart';
+import 'package:food_app/Controller/firestore_firebase_cloud/product_firebase.dart';
 import 'package:food_app/model/product_model.dart';
 
 class AddProductScreen extends StatefulWidget {

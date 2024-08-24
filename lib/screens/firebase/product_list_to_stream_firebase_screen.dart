@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:food_app/Controller/firebase_colc/product_firebase.dart';
+import 'package:food_app/Controller/firestore_firebase_cloud/product_firebase.dart';
 import 'package:food_app/model/product_model.dart';
 import 'package:food_app/screens/firebase/add_product_to_firebase_creen.dart';
 import 'package:food_app/screens/firebase/edit_product_to_firebase_creen.dart';
