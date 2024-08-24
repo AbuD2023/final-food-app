@@ -33,7 +33,7 @@ class CustomButton extends StatelessWidget {
                     width: 24,
                   )
                 : const SizedBox(),
-            SizedBox(
+            const SizedBox(
               width: 6,
             ),
             Text(

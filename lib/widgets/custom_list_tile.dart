@@ -11,7 +11,7 @@ class CustomListTile extends StatelessWidget {
       leading: Image.asset(image),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
       ),
     );

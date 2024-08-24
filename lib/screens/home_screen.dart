@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/Controller/Api/product_api_controller_dio.dart';
 import 'package:food_app/Controller/Api/product_api_controller_http.dart';
-import 'package:food_app/Controller/firebase/auth_user_with_email_and_password_firebase_controller.dart';
-import 'package:food_app/Controller/firebase/auth_user_with_google_sign_in_firebase_controller.dart';
+import 'package:food_app/Controller/firebase_auth/auth_user_with_email_and_password_firebase_controller.dart';
+import 'package:food_app/Controller/firebase_auth/auth_user_with_google_sign_in_firebase_controller.dart';
 import 'package:food_app/constants/app_colors.dart';
 import 'package:food_app/constants/app_images.dart';
 import 'package:food_app/model/product_model.dart';
@@ -163,41 +163,43 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 35),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  'Foods',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: AppColors.kPrimaryColor,
-                    decoration: TextDecoration.underline,
-                    decorationColor: AppColors.kPrimaryColor,
-                    decorationThickness: 3,
+            const SingleChildScrollView(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    'Foods',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: AppColors.kPrimaryColor,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.kPrimaryColor,
+                      decorationThickness: 3,
+                    ),
                   ),
-                ),
-                Text(
-                  'Drinks',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Color(0xff9A9A9D),
+                  Text(
+                    'Drinks',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xff9A9A9D),
+                    ),
                   ),
-                ),
-                Text(
-                  'Snacks',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Color(0xff9A9A9D),
+                  Text(
+                    'Snacks',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xff9A9A9D),
+                    ),
                   ),
-                ),
-                Text(
-                  'Sauce',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Color(0xff9A9A9D),
+                  Text(
+                    'Sauce',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xff9A9A9D),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(
               height: 50,

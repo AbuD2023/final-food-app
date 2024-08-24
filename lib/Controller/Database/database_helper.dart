@@ -13,6 +13,13 @@ CREATE TABLE IF NOT EXISTS Product(
   price float,
   rate float
 );
+CREATE TABLE IF NOT EXISTS user(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT,
+  password TEXT,
+  address TEXT,
+  phone TEXT
+);
 ''');
   }
 
@@ -27,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Product(
   }
 
   static Future<int> insertFood(
-      ProductModel productModel, sql.Database database) async {
+      ProductModel productModel) async {
     final db = await DatabaseHelper.create();
     final data = {
       'image': productModel.image,
@@ -35,21 +42,28 @@ CREATE TABLE IF NOT EXISTS Product(
       'price': productModel.price,
       'rate': productModel.rate,
     };
-    final id = await db.insert('Product', data,
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    final id = await db.insert(
+      'Product',
+      data,
+      conflictAlgorithm: sql.ConflictAlgorithm.replace,
+    );
     return id;
   }
 
-  static Future<List<Map<String, dynamic>>> getFood() async {
+  static Future<List<Map<String, Object?>>> getFood() async {
     final db = await DatabaseHelper.create();
     return db.query('Product', orderBy: 'id');
   }
 
-  static Future<void> getFoodById() async {}
-  static Future<void> deleteFoodById(String id) async {
+  static Future<List<Map<String, Object?>>> getFoodById(int id) async {
+    final db = await DatabaseHelper.create();
+    return db.query('Product', where: "id ?", whereArgs: [id]);
+  }
+
+  static Future<void> deleteFoodById(int id) async {
     final db = await DatabaseHelper.create();
     try {
-      await db.delete('Product', where: "id = ?", whereArgs: [int.parse(id)]);
+      await db.delete('Product', where: "id = ?", whereArgs: [id]);
     } catch (e) {
       log('error: $e');
     }

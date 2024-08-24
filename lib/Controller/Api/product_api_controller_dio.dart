@@ -100,7 +100,7 @@ class ProductApiControllerWithDio with ChangeNotifier {
     // قراءة الصورة وتحويلها إلى بايتات byte لتخزينها في عمود Image في API
 
     final bytes = await selectedImage?.readAsBytes();
-    final base64String = base64Encode(bytes != null ? bytes : []);
+    final base64String = base64Encode(bytes ?? []);
 
     try {
       // Save the data and upload the image to the server/api

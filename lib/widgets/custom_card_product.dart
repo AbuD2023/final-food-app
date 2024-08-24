@@ -51,7 +51,7 @@ class CustomCardProduct extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Column(
@@ -65,12 +65,12 @@ class CustomCardProduct extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    'Rs.${price}',
-                    style: TextStyle(
+                    'Rs.$price',
+                    style: const TextStyle(
                       fontSize: 20,
                       color: Color(0xffFF470B),
                       fontWeight: FontWeight.w400,

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:food_app/Controller/firebase/auth_user_with_email_and_password_firebase_controller.dart';
+import 'package:food_app/Controller/firebase_auth/auth_user_with_email_and_password_firebase_controller.dart';
 import 'package:food_app/constants/app_colors.dart';
 import 'package:food_app/widgets/custom_button.dart';
 
@@ -32,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             key: _formKey,
             child: ListView(
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -52,17 +52,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 35,
                 ),
-                Text(
+                const Text(
                   'Email',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 16),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 TextFormField(
@@ -77,31 +77,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     email = value;
                     print(value);
                   },
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                   ),
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 23,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Password',
                       style: TextStyle(
                           color: Colors.white,
@@ -122,12 +122,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 : Icons.visibility,
                             color: Colors.white,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
                             showPassword ? 'Show' : 'Hide',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16),
@@ -161,19 +161,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                   ),
                   keyboardType: TextInputType.visiblePassword,
                   maxLength: 8,
                 ),
-                SizedBox(height: 59),
+                const SizedBox(height: 59),
                 CustomButton(
                   backgroundColor: Colors.black,
                   text: 'Sign UP ',
@@ -188,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   textColor: Colors.white,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
               ],

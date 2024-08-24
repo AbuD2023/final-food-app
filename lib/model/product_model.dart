@@ -1,5 +1,6 @@
 class ProductModel {
   int? id;
+  String? docId;
   String? image;
   String? title;
   double? price;
@@ -7,13 +8,16 @@ class ProductModel {
 
   ProductModel({
     this.id,
+    this.docId,
     required this.image,
     required this.title,
     required this.price,
     required this.rate,
   });
-  ProductModel.fromJson(Map<String, dynamic> json) {
+  ProductModel.fromJson(Map<String, dynamic> json, {String? docId}) {
     id = json['id'];
+    this.docId =
+        docId ?? '${DateTime.now().microsecondsSinceEpoch}';
     image = json['image'];
     title = json['title'];
     price = double.parse(json['price'].toString());
@@ -21,11 +25,11 @@ class ProductModel {
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['Id'] = id;
-    data['Image'] = image;
-    data['Title'] = title;
-    data['Price'] = price;
-    data['Rate'] = rate;
+    data['id'] = id;
+    data['image'] = image;
+    data['title'] = title;
+    data['price'] = price;
+    data['rate'] = rate;
     return data;
   }
 }

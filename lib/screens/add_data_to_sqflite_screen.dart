@@ -1,17 +1,19 @@
-import 'dart:developer';
+import 'dart:developer' as log;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:food_app/Controller/Database/database_helper.dart';
 import 'package:food_app/model/product_model.dart';
 
-class InsertDatabsae extends StatefulWidget {
-  const InsertDatabsae({super.key});
+class AddDataToFirebaseScreen extends StatefulWidget {
+  const AddDataToFirebaseScreen({super.key});
 
   @override
-  State<InsertDatabsae> createState() => _InsertDatabsaeState();
+  State<AddDataToFirebaseScreen> createState() =>
+      _AddDataToFirebaseScreenState();
 }
 
-class _InsertDatabsaeState extends State<InsertDatabsae> {
+class _AddDataToFirebaseScreenState extends State<AddDataToFirebaseScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController rateController = TextEditingController();
@@ -26,12 +28,12 @@ class _InsertDatabsaeState extends State<InsertDatabsae> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Insert dataBase'),
+          title: const Text('Insert dataBase'),
           centerTitle: true,
         ),
         body: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             TextFormField(
@@ -53,7 +55,7 @@ class _InsertDatabsaeState extends State<InsertDatabsae> {
                 fillColor: Colors.grey[200],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             TextFormField(
@@ -75,7 +77,7 @@ class _InsertDatabsaeState extends State<InsertDatabsae> {
                 fillColor: Colors.grey[200],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             TextFormField(
@@ -97,75 +99,60 @@ class _InsertDatabsaeState extends State<InsertDatabsae> {
                 fillColor: Colors.grey[200],
               ),
             ),
-            // CustomTextFormField(
-            //   controller: titleController,
-            //   hintText: 'اسم المنتج',
-            //   textInputType: TextInputType.text,
-            // ),
-            // CustomTextFormField(
-            //   controller: priceController,
-            //   hintText: 'Price',
-            //   textInputType: TextInputType.number,
-            // ),
-            // CustomTextFormField(
-            //   controller: rateController,
-            //   hintText: 'Rate',
-            //   textInputType: TextInputType.number,
-            // ),
             ElevatedButton(
                 onPressed: () async {
-                  final db = await DatabaseHelper.create();
-                  ProductModel productModel = ProductModel(
+                  // final db = await DatabaseHelper.create();
+                  ProductModel product = ProductModel(
+                    id: Random(60).nextInt(1000),
                     image: 'assets/images/pro2.png',
                     title: titleController.text,
                     price: double.parse(priceController.text),
                     rate: double.parse(rateController.text),
                   );
-                  DatabaseHelper.insertFood(productModel, db);
-                  log('save on datbase');
+                  DatabaseHelper.insertFood(product);
+                  log.log('save on datbase');
                   setState(() {});
                 },
-                child: Text('Save')),
+                child: const Text('Save')),
             FutureBuilder<List>(
               future: DatabaseHelper.getFood(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (!snapshot.hasData || snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text('لا توجد بيانات'),
                   );
                 } else {
-                  final data = snapshot.data;
-                  log('${data}');
                   return Flexible(
                     child: ListView.builder(
-                      itemCount: data!.length,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
+                        final data = snapshot.data![index];
                         return ListTile(
-                          title: Text(data[index]['title']),
+                          title: Text(data['title']),
                           trailing: CircleAvatar(
-                            child: Image.asset(data[index]['image']),
+                            child: Image.asset(data['image']),
                           ),
                           subtitle: Row(
                             children: [
-                              Text('price: ${data[index]['price']}'),
-                              SizedBox(
+                              Text('price: ${data['price']}'),
+                              const SizedBox(
                                 width: 15,
                               ),
-                              Text('rate: ${data[index]['rate']}'),
-                              SizedBox(
+                              Text('rate: ${data['rate']}'),
+                              const SizedBox(
                                 width: 15,
                               ),
-                              Text('id: ${data[index]['id']}'),
+                              Text('id: ${data['id']}'),
                             ],
                           ),
                           onTap: () async {
-                            await DatabaseHelper.create();
-                            await DatabaseHelper.deleteFoodById(
-                                data[index]['id'].toString());
+                            // await DatabaseHelper.create();
+                            await DatabaseHelper.deleteFoodById(data['id']);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text('تم الحذف بنجاح')));

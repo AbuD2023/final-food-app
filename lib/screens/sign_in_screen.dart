@@ -1,10 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:food_app/Controller/firebase/auth_user_with_email_and_password_firebase_controller.dart';
-import 'package:food_app/Controller/firebase/auth_user_with_google_sign_in_firebase_controller.dart';
+import 'package:food_app/Controller/firebase_auth/auth_user_with_email_and_password_firebase_controller.dart';
+import 'package:food_app/Controller/firebase_auth/auth_user_with_google_sign_in_firebase_controller.dart';
 import 'package:food_app/constants/app_colors.dart';
 import 'package:food_app/widgets/custom_button.dart';
 
@@ -38,7 +36,7 @@ class _SignInScreenState extends State<SignInScreen> {
             key: _formKey,
             child: ListView(
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -58,17 +56,17 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 35,
                 ),
-                Text(
+                const Text(
                   'Email',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 16),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 TextFormField(
@@ -83,31 +81,31 @@ class _SignInScreenState extends State<SignInScreen> {
                     email = value;
                     print(value);
                   },
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                   ),
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 23,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Password',
                       style: TextStyle(
                           color: Colors.white,
@@ -141,12 +139,12 @@ class _SignInScreenState extends State<SignInScreen> {
                                 : Icons.visibility,
                             color: Colors.white,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
                             showPassword ? 'Show' : 'Hide',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16),
@@ -180,12 +178,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.white,
                         )),
                   ),
@@ -212,7 +210,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 59),
+                const SizedBox(height: 59),
                 CustomButton(
                   backgroundColor: Colors.black,
                   text: 'Sign in ',
@@ -230,10 +228,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   },
                   textColor: Colors.white,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
@@ -260,7 +258,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 18),
+                const SizedBox(height: 18),
                 CustomButton(
                   backgroundColor: Colors.black,
                   text: 'Create an account',
@@ -269,7 +267,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   },
                   textColor: Colors.white,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 19,
                 ),
                 CustomButton(

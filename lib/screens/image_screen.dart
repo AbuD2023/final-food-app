@@ -16,7 +16,7 @@ class _ImageScreenState extends State<ImageScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Text(
+          const Text(
             'testing github',
             style: TextStyle(),
           ),
@@ -25,7 +25,7 @@ class _ImageScreenState extends State<ImageScreen> {
               height: 200,
               width: 200,
               imageUrl: 'http://via.placeholder.com/350x150',
-              placeholder: (context, url) => SpinKitWave(
+              placeholder: (context, url) => const SpinKitWave(
                 color: Colors.red,
                 size: 50.0,
               ),

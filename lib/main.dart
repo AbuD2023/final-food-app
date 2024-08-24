@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/screens/base.dart';
+import 'package:food_app/screens/firebase/product_list_to_futuer_firebase_screen.dart';
+import 'package:food_app/screens/firebase/product_list_to_stream_firebase_screen.dart';
 import 'package:food_app/screens/sign_in_screen.dart';
 import 'package:food_app/screens/sign_up_screen.dart';
 import 'package:food_app/screens/splash_screen.dart';
@@ -38,6 +40,10 @@ class MyApp extends StatelessWidget {
         'base_screen': (context) => const BaseScreen(),
         'SignUpScreen': (context) => const SignUpScreen(),
         'SignInScreen': (context) => const SignInScreen(),
+        'ProductListFirebaseStreamScreen': (context) =>
+            const ProductListFirebaseStreamScreen(),
+        'ProductListFirebaseFutuercreen': (context) =>
+            const ProductListFirebaseFutuercreen(),
       },
     );
   }

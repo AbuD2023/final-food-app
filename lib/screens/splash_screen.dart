@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/screens/sign_in_screen.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_images.dart';
@@ -66,7 +65,7 @@ class SplashScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30.0),
                       color: Colors.white,
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Yum Bites',
                         style: TextStyle(

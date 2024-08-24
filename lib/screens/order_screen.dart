@@ -8,10 +8,10 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF5F5F8),
+      backgroundColor: const Color(0xffF5F5F8),
       appBar: AppBar(
-        backgroundColor: Color(0xffF5F5F8),
-        title: Text(
+        backgroundColor: const Color(0xffF5F5F8),
+        title: const Text(
           'Order',
           style: TextStyle(fontSize: 18, color: Colors.black),
         ),
@@ -22,22 +22,22 @@ class OrderScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset('assets/images/Avocado.png'),
-          Text(
+          const Text(
             'No orders yet',
             style: TextStyle(
                 fontSize: 28, color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          Text(
+          const Text(
             'Hit the orange button down \n below to Create an order',
             style: TextStyle(
               fontSize: 17,
               color: Colors.black,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 47,
           ),
           Center(
